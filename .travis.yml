@@ -1,0 +1,12 @@
+language: scala
+sudo: false
+jdk: oraclejdk8
+script:
+- sbt "scalafmt::test" "test:scalafmt::test" "sbt:scalafmt::test" "+ compile" "+ test" scripted setSbt013 scripted
+cache:
+  directories:
+  - $HOME/.ivy2/cache
+  - $HOME/.sbt/launchers
+before_cache:
+- find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
+- find $HOME/.ivy2/cache -name "*SNAPSHOT*" | xargs rm -rf
