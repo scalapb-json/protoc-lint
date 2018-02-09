@@ -2,7 +2,7 @@ import sbtrelease.ReleaseStateTransformations._
 
 val Scala210 = "2.10.7"
 val Scala212 = "2.12.4"
-val sbt013 = "0.13.16"
+val sbt013 = "0.13.17"
 
 commands += BasicCommands.newAlias(
   "setSbt013",
@@ -15,7 +15,7 @@ libraryDependencies := {
     case Some((2, 12)) =>
       libs
     case Some((2, 10)) =>
-      // https://github.com/sbt/sbt/blob/v1.1.0/scripted/plugin/src/main/scala/sbt/ScriptedPlugin.scala#L43-L54
+      // https://github.com/sbt/sbt/blob/v1.1.1/scripted/plugin/src/main/scala/sbt/ScriptedPlugin.scala#L43-L54
       libs.filterNot(_.organization == "org.scala-sbt") ++ Seq(
         "org.scala-sbt" % "scripted-sbt" % sbt013 % ScriptedConf,
         "org.scala-sbt" % "sbt-launch" % sbt013 % ScriptedLaunchConf
