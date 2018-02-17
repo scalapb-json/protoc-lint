@@ -86,13 +86,7 @@ val commonSettings = Seq[Def.SettingsDefinition](
     commitReleaseVersion,
     UpdateReadme.updateReadmeProcess,
     tagRelease,
-    ReleaseStep(
-      action = { state =>
-        val extracted = Project extract state
-        extracted.runAggregated(PgpKeys.publishSigned in Global in extracted.get(thisProjectRef), state)
-      },
-      enableCrossBuild = true
-    ),
+    releaseStepCommandAndRemaining("+ publishSigned"),
     setNextVersion,
     commitNextVersion,
     releaseStepCommand("sonatypeReleaseAll"),
