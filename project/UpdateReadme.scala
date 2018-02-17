@@ -5,12 +5,13 @@ import sbtrelease.Git
 object UpdateReadme {
 
   val projectName = "protoc-lint"
+  val shadedName = "protoc-lint-shaded"
 
   val updateReadmeTask = { state: State =>
     val extracted = Project.extract(state)
     val v = extracted get version
     val org =  extracted get organization
-    val modules = projectName :: Nil
+    val modules = projectName :: shadedName :: Nil
     val readme = "README.md"
     val readmeFile = file(readme)
     val newReadme = Predef.augmentString(IO.read(readmeFile)).lines.map{ line =>

@@ -3,10 +3,10 @@ package protoc_lint
 import com.google.protobuf.DescriptorProtos._
 import com.google.protobuf.MessageOrBuilder
 import com.google.protobuf.util.JsonFormat
-import play.api.libs.json._
+import argonaut._
 
 sealed abstract class LintError extends Product with Serializable {
-  final def toJson: JsValue = implicitly[Writes[LintError]].writes(this)
+  final def toJson: Json = implicitly[EncodeJson[LintError]].encode(this)
   final override def toString = toJson.toString
 }
 
@@ -20,29 +20,29 @@ object LintError {
   implicit class GeneratedMessageOps[A <: MessageOrBuilder](val self: A) extends AnyVal {
     def toJsonString: String =
       JsonFormat.printer.print(self)
-    def toPlayJson: JsValue =
-      Json.parse(toJsonString)
+    def toJson: Json =
+      JsonParser.parse(toJsonString).fold(sys.error, identity)
   }
 
-  implicit val writes: Writes[LintError] = new Writes[LintError] {
-    def writes(o: LintError): JsValue = {
-      def build(tpe: String, src: JsValue) =
-        Json.obj(
-          "error_type" -> tpe,
+  implicit val encodeJson: EncodeJson[LintError] = new EncodeJson[LintError] {
+    override def encode(o: LintError) = {
+      def build(tpe: String, src: Json) =
+        Json.jObjectFields(
+          "error_type" -> Json.jString(tpe),
           "source" -> src
         )
 
       o match {
         case EnumNameCapitalsWithUnderscores(enumValue) =>
-          build(EnumNameCapitalsWithUnderscores.toString, enumValue.toPlayJson)
+          build(EnumNameCapitalsWithUnderscores.toString, enumValue.toJson)
         case ServiceNameCamel(service) =>
-          build(ServiceNameCamel.toString, service.toPlayJson)
+          build(ServiceNameCamel.toString, service.toJson)
         case ServiceMethodNameCamel(service) =>
-          build(ServiceMethodNameCamel.toString, service.toPlayJson)
+          build(ServiceMethodNameCamel.toString, service.toJson)
         case MessageNameCamel(message) =>
-          build(MessageNameCamel.toString, message.toPlayJson)
+          build(MessageNameCamel.toString, message.toJson)
         case FieldNameUnderscoreSeparated(field) =>
-          build(FieldNameUnderscoreSeparated.toString, field.toPlayJson)
+          build(FieldNameUnderscoreSeparated.toString, field.toJson)
       }
     }
   }

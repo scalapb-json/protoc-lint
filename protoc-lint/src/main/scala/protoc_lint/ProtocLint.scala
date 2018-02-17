@@ -3,7 +3,7 @@ package protoc_lint
 import protocbridge.ProtocCodeGenerator
 import com.google.protobuf.DescriptorProtos.{EnumValueDescriptorProto, FieldDescriptorProto, FileDescriptorProto}
 import com.google.protobuf.compiler.PluginProtos._
-import play.api.libs.json.{JsArray, Json}
+import argonaut._
 import scala.collection.JavaConverters._
 
 case class ProtocLint(exclude: LintError => Boolean = _ => false) extends ProtocCodeGenerator {
@@ -21,12 +21,12 @@ case class ProtocLint(exclude: LintError => Boolean = _ => false) extends Protoc
 
       println(
         s"found ${errors.size} lint errors. excluded ${excluded.size} errors. realErrors count = ${realErrors.size}")
-      println(Json.prettyPrint(JsArray(excluded.map(_.toJson))))
+      println(Json.jArray(excluded.map(_.toJson)).spaces2)
 
       if (realErrors.isEmpty) {
         CodeGeneratorResponse.newBuilder().build()
       } else {
-        val errorJson = Json.prettyPrint(JsArray(realErrors.map(_.toJson)))
+        val errorJson = Json.jArray(realErrors.map(_.toJson)).spaces2
         CodeGeneratorResponse.newBuilder().setError(errorJson).build()
       }
     }

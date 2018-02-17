@@ -2,7 +2,7 @@ language: scala
 sudo: false
 jdk: oraclejdk8
 script:
-- sbt "scalafmt::test" "test:scalafmt::test" "sbt:scalafmt::test" "+ compile" "+ test" scripted setSbt013 scripted
+- sbt "scalafmt::test" "test:scalafmt::test" "sbt:scalafmt::test" "+ compile" "+ test" testAll
 cache:
   directories:
   - $HOME/.ivy2/cache
