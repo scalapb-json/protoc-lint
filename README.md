@@ -11,7 +11,7 @@ protobuf linter for <https://github.com/thesamet/sbt-protoc>
 
 ## sbt settings
 
-- `project/plugins.sbt`
+### `project/plugins.sbt`
 
 ```scala
 libraryDependencies += "io.github.scalapb-json" %% "protoc-lint" % "0.2.1"
@@ -27,7 +27,7 @@ addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.15")
 ```
 
 
-- `build.sbt`
+### `build.sbt`
 
 ```scala
 PB.targets in Compile := Seq(
