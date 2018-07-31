@@ -159,7 +159,6 @@ val noPublish = Seq(
 )
 
 noPublish
-disablePlugins(ScriptedPlugin)
 
 commands += Command.command("testAll") {
   List(
@@ -177,17 +176,19 @@ commands += Command.command("testAll") {
   ) ::: _
 }
 
-val protocLint = Project("protoc-lint", file("protoc-lint")).settings(
-  commonSettings,
-  crossScalaVersions := Seq(Scala210, Scala211, Scala212),
-  scriptedSettings,
-  unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
-  name := UpdateReadme.projectName,
-  libraryDependencies ++= Seq(
-    "com.google.protobuf" % "protobuf-java-util" % "3.6.0",
-    "io.argonaut" %% "argonaut" % "6.2.2"
+val protocLint = Project("protoc-lint", file("protoc-lint"))
+  .settings(
+    commonSettings,
+    crossScalaVersions := Seq(Scala210, Scala211, Scala212),
+    scriptedSettings,
+    unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
+    name := UpdateReadme.projectName,
+    libraryDependencies ++= Seq(
+      "com.google.protobuf" % "protobuf-java-util" % "3.6.0",
+      "io.argonaut" %% "argonaut" % "6.2.2"
+    )
   )
-)
+  .enablePlugins(ScriptedPlugin)
 
 val shadeTarget = settingKey[String]("Target to use when shading")
 
@@ -237,5 +238,6 @@ val shaded = Project("shaded", file("shaded"))
     }
   )
   .dependsOn(protocLint)
+  .enablePlugins(ScriptedPlugin)
 
 val root = project.in(file(".")).aggregate(protocLint, shaded)
