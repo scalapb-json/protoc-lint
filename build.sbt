@@ -1,4 +1,6 @@
 import sbtrelease.ReleaseStateTransformations._
+import scala.collection.JavaConverters._
+import java.lang.management.ManagementFactory
 
 val Scala210 = "2.10.7"
 val Scala211 = "2.11.12"
@@ -47,7 +49,7 @@ val scriptedSettings = Seq(
   },
   sbtTestDirectory := file("test"),
   scriptedBufferLog := false,
-  scriptedLaunchOpts ++= sys.process.javaVmArguments.filter(
+  scriptedLaunchOpts ++= ManagementFactory.getRuntimeMXBean.getInputArguments.asScala.toList.filter(
     a => Seq("-Xmx", "-Xms", "-XX", "-Dsbt.log.noformat").exists(a.startsWith)
   ),
   scriptedLaunchOpts ++= Seq(
