@@ -27,7 +27,9 @@ val scriptedSettings = Seq(
         // for sbt 0.13 scripted test
         Seq(
           Resolver.url("typesafe ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases/"))(
-            Resolver.defaultIvyPatterns))
+            Resolver.defaultIvyPatterns
+          )
+        )
       case _ =>
         Nil
     }
@@ -228,8 +230,8 @@ val shaded = Project("shaded", file("shaded"))
       new RuleTransformer(new RewriteRule {
         override def transform(node: Node) = node match {
           case e: Elem
-              if e.label == "dependency" && e.child.exists(
-                child => child.label == "artifactId" && child.text.startsWith(UpdateReadme.projectName)) =>
+              if e.label == "dependency" && e.child
+                .exists(child => child.label == "artifactId" && child.text.startsWith(UpdateReadme.projectName)) =>
             Comment(s"scalapb_lint has been removed.")
           case _ =>
             node

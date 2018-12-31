@@ -20,7 +20,8 @@ case class ProtocLint(exclude: LintError => Boolean = _ => false) extends Protoc
       val (excluded, realErrors) = errors.partition(exclude)
 
       println(
-        s"found ${errors.size} lint errors. excluded ${excluded.size} errors. realErrors count = ${realErrors.size}")
+        s"found ${errors.size} lint errors. excluded ${excluded.size} errors. realErrors count = ${realErrors.size}"
+      )
       println(Json.jArray(excluded.map(_.toJson)).spaces2)
 
       if (realErrors.isEmpty) {
