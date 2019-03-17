@@ -140,7 +140,7 @@ val commonSettings = Seq[Def.SettingsDefinition](
     "-language:implicitConversions",
     "-Yno-adapted-args"
   ),
-  libraryDependencies += "com.thesamet.scalapb" %% "protoc-bridge" % "0.7.3",
+  libraryDependencies += "com.thesamet.scalapb" %% "protoc-bridge" % "0.7.4",
   scalacOptions ++= PartialFunction
     .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
       case Some((2, v)) if v >= 11 => unusedWarnings
