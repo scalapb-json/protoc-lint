@@ -178,6 +178,8 @@ commands += Command.command("testAll") {
   ) ::: _
 }
 
+val argonautVersion = settingKey[String]("")
+
 val protocLint = Project("protoc-lint", file("protoc-lint"))
   .settings(
     commonSettings,
@@ -185,9 +187,17 @@ val protocLint = Project("protoc-lint", file("protoc-lint"))
     scriptedSettings,
     unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
     name := UpdateReadme.projectName,
+    argonautVersion := {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, 10)) =>
+          "6.2.2"
+        case _ =>
+          "6.2.3"
+      }
+    },
     libraryDependencies ++= Seq(
       "com.google.protobuf" % "protobuf-java-util" % "3.7.0",
-      "io.argonaut" %% "argonaut" % "6.2.2"
+      "io.argonaut" %% "argonaut" % argonautVersion.value
     )
   )
   .enablePlugins(ScriptedPlugin)
