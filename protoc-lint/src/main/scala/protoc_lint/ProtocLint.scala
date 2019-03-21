@@ -54,7 +54,7 @@ case class ProtocLint(exclude: LintError => Boolean = _ => false) extends Protoc
     }
   }
 
-  private[this] def checkFields(fields: Seq[FieldDescriptorProto]): List[LintError] =
+  private[this] def checkFields(fields: collection.Seq[FieldDescriptorProto]): List[LintError] =
     fields.flatMap { field =>
       val name = field.getName
       if (name.matches(UnderscoreSeparated)) {
@@ -62,9 +62,9 @@ case class ProtocLint(exclude: LintError => Boolean = _ => false) extends Protoc
       } else {
         List(LintError.FieldNameUnderscoreSeparated(field))
       }
-    }(collection.breakOut)
+    }.toList
 
-  private[this] def lint0(files: Seq[FileDescriptorProto]): List[LintError] = {
+  private[this] def lint0(files: collection.Seq[FileDescriptorProto]): List[LintError] = {
     files.flatMap { f =>
       List(
         f.getMessageTypeList.asScala.flatMap { message =>
@@ -109,6 +109,6 @@ case class ProtocLint(exclude: LintError => Boolean = _ => false) extends Protoc
           ).flatten
         }
       ).flatten
-    }(collection.breakOut)
+    }.toList
   }
 }

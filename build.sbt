@@ -5,9 +5,10 @@ import java.lang.management.ManagementFactory
 val Scala210 = "2.10.7"
 val Scala211 = "2.11.12"
 val Scala212 = "2.12.8"
+val Scala213 = "2.13.0-M5"
 val sbt013 = "0.13.18"
 
-val unusedWarnings = Seq("-Ywarn-unused", "-Ywarn-unused-import")
+val unusedWarnings = Seq("-Ywarn-unused")
 
 val tagName = Def.setting {
   s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value
@@ -137,9 +138,14 @@ val commonSettings = Seq[Def.SettingsDefinition](
     "-Xlint",
     "-language:existentials",
     "-language:higherKinds",
-    "-language:implicitConversions",
-    "-Yno-adapted-args"
+    "-language:implicitConversions"
   ),
+  scalacOptions ++= PartialFunction
+    .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
+      case Some((2, v)) if v <= 12 => Seq("-Yno-adapted-args")
+    }
+    .toList
+    .flatten,
   libraryDependencies += "com.thesamet.scalapb" %% "protoc-bridge" % "0.7.4",
   scalacOptions ++= PartialFunction
     .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
@@ -183,7 +189,7 @@ val argonautVersion = settingKey[String]("")
 val protocLint = Project("protoc-lint", file("protoc-lint"))
   .settings(
     commonSettings,
-    crossScalaVersions := Seq(Scala210, Scala211, Scala212),
+    crossScalaVersions := Seq(Scala210, Scala211, Scala212, Scala213),
     scriptedSettings,
     unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
     name := UpdateReadme.projectName,
