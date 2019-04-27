@@ -1,8 +1,10 @@
 language: scala
 sudo: false
-jdk:
-- oraclejdk8
-- openjdk11
+matrix:
+  include:
+  - jdk: oraclejdk8
+  - jdk: openjdk11
+    dist: xenial
 script:
 - sbt "scalafmtCheck" "test:scalafmtCheck" "scalafmtSbtCheck" "+ compile" "+ test" testAll
 cache:

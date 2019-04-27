@@ -5,7 +5,7 @@ import java.lang.management.ManagementFactory
 val Scala210 = "2.10.7"
 val Scala211 = "2.11.12"
 val Scala212 = "2.12.8"
-val Scala213 = "2.13.0-M5"
+val Scala213 = "2.13.0-RC1"
 val sbt013 = "0.13.18"
 
 val unusedWarnings = Seq("-Ywarn-unused")
@@ -146,7 +146,7 @@ val commonSettings = Seq[Def.SettingsDefinition](
     }
     .toList
     .flatten,
-  libraryDependencies += "com.thesamet.scalapb" %% "protoc-bridge" % "0.7.4",
+  libraryDependencies += "com.thesamet.scalapb" %% "protoc-bridge" % "0.7.5",
   scalacOptions ++= PartialFunction
     .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
       case Some((2, v)) if v >= 11 => unusedWarnings
