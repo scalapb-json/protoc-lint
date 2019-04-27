@@ -1,4 +1,5 @@
 language: scala
+dist: xenial
 sudo: false
 jdk:
 - oraclejdk8
