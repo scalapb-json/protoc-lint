@@ -70,7 +70,7 @@ TaskKey[Unit](cleanLocalMaven) := {
   IO.delete(dir)
 }
 
-val commonSettings = Seq[Def.SettingsDefinition](
+val commonSettings = Def.settings(
   commands += BasicCommands.newAlias(
     setSbt013,
     s"""; ^^ ${sbt013} ; set scalaVersion := "${Scala210}" """
@@ -154,7 +154,7 @@ val commonSettings = Seq[Def.SettingsDefinition](
     .toList
     .flatten,
   Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings)
-).flatMap(_.flatten)
+)
 
 commonSettings
 
