@@ -14,7 +14,7 @@ protobuf linter for <https://github.com/thesamet/sbt-protoc>
 ### `project/plugins.sbt`
 
 ```scala
-libraryDependencies += "io.github.scalapb-json" %% "protoc-lint" % "0.2.3"
+libraryDependencies += "io.github.scalapb-json" %% "protoc-lint" % "0.2.4"
 addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.21")
 ```
 
@@ -22,7 +22,7 @@ or
 
 ```scala
 // shaded version. you can avoid dependency conflict. only sbt Scala 2.12, sbt 1.x
-libraryDependencies += "io.github.scalapb-json" %% "protoc-lint-shaded" % "0.2.3"
+libraryDependencies += "io.github.scalapb-json" %% "protoc-lint-shaded" % "0.2.4"
 addSbtPlugin("com.thesamet" % "sbt-protoc" % "0.99.21")
 ```
 
