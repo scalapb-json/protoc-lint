@@ -4,8 +4,8 @@ import java.lang.management.ManagementFactory
 
 val Scala210 = "2.10.7"
 val Scala211 = "2.11.12"
-val Scala212 = "2.12.8"
-val Scala213 = "2.13.0"
+val Scala212 = "2.12.10"
+val Scala213 = "2.13.1"
 val sbt013 = "0.13.18"
 
 val unusedWarnings = Seq("-Ywarn-unused")
