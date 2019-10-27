@@ -146,7 +146,7 @@ val commonSettings = Def.settings(
     }
     .toList
     .flatten,
-  libraryDependencies += "com.thesamet.scalapb" %% "protoc-bridge" % "0.7.10",
+  libraryDependencies += "com.thesamet.scalapb" %% "protoc-bridge" % "0.7.11",
   scalacOptions ++= PartialFunction
     .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
       case Some((2, v)) if v >= 11 => unusedWarnings
