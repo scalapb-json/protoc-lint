@@ -8,6 +8,8 @@ val Scala212 = "2.12.10"
 val Scala213 = "2.13.1"
 val sbt013 = "0.13.18"
 
+Global / onChangedBuildSource := ReloadOnSourceChanges
+
 val unusedWarnings = Seq("-Ywarn-unused")
 
 val tagName = Def.setting {
