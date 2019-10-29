@@ -92,9 +92,9 @@ val commonSettings = Def.settings(
     UpdateReadme.updateReadmeProcess,
     tagRelease,
     releaseStepCommandAndRemaining("+ publishSigned"),
+    releaseStepCommand("sonatypeBundleRelease"),
     setNextVersion,
     commitNextVersion,
-    releaseStepCommand("sonatypeReleaseAll"),
     UpdateReadme.updateReadmeProcess,
     pushChanges
   ),
@@ -124,12 +124,7 @@ val commonSettings = Def.settings(
     </developers>
   },
   publishLocal := {}, // use local maven in scripted-test
-  publishTo := Some(
-    if (isSnapshot.value)
-      Opts.resolver.sonatypeSnapshots
-    else
-      Opts.resolver.sonatypeStaging
-  ),
+  publishTo := sonatypePublishToBundle.value,
   scalaVersion := Scala212,
   crossScalaVersions := Seq(Scala212), // TODO shaded version does not work with Scala 2.10 ???
   scalacOptions ++= Seq(
