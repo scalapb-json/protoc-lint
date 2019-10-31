@@ -7,7 +7,6 @@ import argonaut._
 import scala.collection.JavaConverters._
 
 case class ProtocLint(exclude: LintError => Boolean = _ => false) extends ProtocCodeGenerator {
-
   override def run(req: Array[Byte]): Array[Byte] =
     run0(CodeGeneratorRequest.parseFrom(req)).toByteArray
 
