@@ -3,7 +3,6 @@ import sbtrelease.ReleasePlugin.autoImport.ReleaseStep
 import sbtrelease.Git
 
 object UpdateReadme {
-
   val projectName = "protoc-lint"
   val shadedName = "protoc-lint-shaded"
 
