@@ -201,7 +201,7 @@ val protocLint = Project("protoc-lint", file("protoc-lint"))
       }
     },
     libraryDependencies ++= Seq(
-      "com.google.protobuf" % "protobuf-java-util" % "3.11.3",
+      "com.google.protobuf" % "protobuf-java-util" % "3.11.4",
       "io.argonaut" %% "argonaut" % argonautVersion.value
     )
   )
