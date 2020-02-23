@@ -38,9 +38,7 @@ case class ProtocLint(exclude: LintError => Boolean = _ => false) extends Protoc
 
   private[this] def lint(req: CodeGeneratorRequest): List[LintError] = {
     val toGenerate = req.getFileToGenerateList.asScala.toSet
-    val files = req.getProtoFileList.asScala.filter { p =>
-      toGenerate.contains(p.getName)
-    }
+    val files = req.getProtoFileList.asScala.filter { p => toGenerate.contains(p.getName) }
     lint0(files)
   }
 
@@ -68,9 +66,7 @@ case class ProtocLint(exclude: LintError => Boolean = _ => false) extends Protoc
       List(
         f.getMessageTypeList.asScala.flatMap { message =>
           List(
-            message.getNestedTypeList.asScala.flatMap { m =>
-              checkFields(m.getFieldList.asScala)
-            },
+            message.getNestedTypeList.asScala.flatMap { m => checkFields(m.getFieldList.asScala) },
             message.getEnumTypeList.asScala.flatMap(
               _.getValueList.asScala.flatMap(checkEnum)
             ),
