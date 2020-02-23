@@ -230,9 +230,7 @@ val shaded = Project("shaded", file("shaded"))
         "protobuf-java-util"
       )
 
-      (fullClasspath in assembly).value.filterNot { c =>
-        toInclude.exists(prefix => c.data.getName.startsWith(prefix))
-      }
+      (fullClasspath in assembly).value.filterNot { c => toInclude.exists(prefix => c.data.getName.startsWith(prefix)) }
     },
     artifact in (Compile, packageBin) := (artifact in (Compile, assembly)).value,
     addArtifact(artifact in (Compile, packageBin), assembly),
