@@ -2,11 +2,8 @@ import sbtrelease.ReleaseStateTransformations._
 import scala.collection.JavaConverters._
 import java.lang.management.ManagementFactory
 
-val Scala210 = "2.10.7"
-val Scala211 = "2.11.12"
 val Scala212 = "2.12.10"
 val Scala213 = "2.13.1"
-val sbt013 = "0.13.18"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
@@ -24,30 +21,11 @@ val tagOrHash = Def.setting {
 }
 
 val scriptedSettings = Seq(
-  resolvers ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 10)) =>
-        // for sbt 0.13 scripted test
-        Seq(
-          Resolver.url("typesafe ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases/"))(
-            Resolver.defaultIvyPatterns
-          )
-        )
-      case _ =>
-        Nil
-    }
-  },
   libraryDependencies := {
     val libs = libraryDependencies.value
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, 12)) =>
         libs
-      case Some((2, 10)) =>
-        // https://github.com/sbt/sbt/blob/v1.1.1/scripted/plugin/src/main/scala/sbt/ScriptedPlugin.scala#L43-L54
-        libs.filterNot(_.organization == "org.scala-sbt") ++ Seq(
-          "org.scala-sbt" % "scripted-sbt" % sbt013 % ScriptedConf,
-          "org.scala-sbt" % "sbt-launch" % sbt013 % ScriptedLaunchConf
-        )
       case _ =>
         libs.filterNot(_.organization == "org.scala-sbt")
     }
@@ -63,7 +41,6 @@ val scriptedSettings = Seq(
   )
 )
 
-val setSbt013 = "setSbt013"
 val cleanLocalMaven = "cleanLocalMaven"
 
 TaskKey[Unit](cleanLocalMaven) := {
@@ -73,10 +50,6 @@ TaskKey[Unit](cleanLocalMaven) := {
 }
 
 val commonSettings = Def.settings(
-  commands += BasicCommands.newAlias(
-    setSbt013,
-    s"""; ^^ ${sbt013} ; set scalaVersion := "${Scala210}" """
-  ),
   description := "protobuf linter",
   licenses += ("MIT", url("https://opensource.org/licenses/MIT")),
   organization := "io.github.scalapb-json",
@@ -146,12 +119,7 @@ val commonSettings = Def.settings(
     .toList
     .flatten,
   libraryDependencies += "com.thesamet.scalapb" %% "protoc-bridge" % "0.7.14",
-  scalacOptions ++= PartialFunction
-    .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
-      case Some((2, v)) if v >= 11 => unusedWarnings
-    }
-    .toList
-    .flatten,
+  scalacOptions ++= unusedWarnings,
   Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings)
 )
 
@@ -176,8 +144,6 @@ commands += Command.command("testAll") {
     s"project ${protocLint.id}",
     "+ publishM2",
     "scripted",
-    setSbt013,
-    "scripted",
     "project /",
     cleanLocalMaven
   ) ::: _
@@ -188,18 +154,11 @@ val argonautVersion = settingKey[String]("")
 val protocLint = Project("protoc-lint", file("protoc-lint"))
   .settings(
     commonSettings,
-    crossScalaVersions := Seq(Scala210, Scala211, Scala212, Scala213),
+    crossScalaVersions := Seq(Scala212, Scala213),
     scriptedSettings,
     unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
     name := UpdateReadme.projectName,
-    argonautVersion := {
-      CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((2, 10)) =>
-          "6.2.2"
-        case _ =>
-          "6.2.3"
-      }
-    },
+    argonautVersion := "6.2.3",
     libraryDependencies ++= Seq(
       "com.google.protobuf" % "protobuf-java-util" % "3.11.4",
       "io.argonaut" %% "argonaut" % argonautVersion.value
