@@ -200,14 +200,15 @@ val shaded = Project("shaded", file("shaded"))
       import scala.xml.transform.RuleTransformer
       import scala.xml.transform.RewriteRule
       new RuleTransformer(new RewriteRule {
-        override def transform(node: Node) = node match {
-          case e: Elem
-              if e.label == "dependency" && e.child
-                .exists(child => child.label == "artifactId" && child.text.startsWith(UpdateReadme.projectName)) =>
-            Comment(s"scalapb_lint has been removed.")
-          case _ =>
-            node
-        }
+        override def transform(node: Node) =
+          node match {
+            case e: Elem
+                if e.label == "dependency" && e.child
+                  .exists(child => child.label == "artifactId" && child.text.startsWith(UpdateReadme.projectName)) =>
+              Comment(s"scalapb_lint has been removed.")
+            case _ =>
+              node
+          }
       }).transform(node).head
     }
   )
