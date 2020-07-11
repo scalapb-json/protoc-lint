@@ -103,7 +103,7 @@ val commonSettings = Def.settings(
   publishLocal := {}, // use local maven in scripted-test
   publishTo := sonatypePublishToBundle.value,
   scalaVersion := Scala212,
-  crossScalaVersions := Seq(Scala212), // TODO shaded version does not work with Scala 2.10 ???
+  crossScalaVersions := Seq(Scala212),
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
