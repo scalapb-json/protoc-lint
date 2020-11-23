@@ -5,7 +5,7 @@ jdk:
 - openjdk8
 - openjdk11
 script:
-- sbt "scalafmtCheck" "test:scalafmtCheck" "scalafmtSbtCheck" "+ compile" "+ test" testAll
+- sbt scalafmtCheckAll "scalafmtSbtCheck" "+ compile" "+ test" testAll
 cache:
   directories:
   - $HOME/.ivy2/cache
