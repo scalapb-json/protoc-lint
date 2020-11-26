@@ -1,6 +1,5 @@
 # protoc-lint
 
-[![Build Status](https://travis-ci.com/scalapb-json/protoc-lint.svg?branch=master)](https://travis-ci.com/scalapb-json/protoc-lint)
 [![scaladoc](https://javadoc-badge.appspot.com/io.github.scalapb-json/protoc-lint_2.12.svg?label=scaladoc)](https://javadoc-badge.appspot.com/io.github.scalapb-json/protoc-lint_2.12/protoc_lint/index.html?javadocio=true)
 
 protobuf linter for <https://github.com/thesamet/sbt-protoc>
