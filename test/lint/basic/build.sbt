@@ -1,4 +1,4 @@
-scalaVersion := "2.12.12"
+scalaVersion := "2.12.13"
 
 PB.targets in Compile := Seq(
   PB.gens.java -> (sourceManaged in Compile).value,
