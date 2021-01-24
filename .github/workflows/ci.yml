@@ -25,3 +25,6 @@ jobs:
            "+ compile"
            "+ test"
            testAll
+    - shell: bash
+      run: rm -rf "$HOME/.ivy2/local" || true
+           rm -rf "$HOME/.m2" || true
