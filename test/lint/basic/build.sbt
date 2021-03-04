@@ -1,8 +1,8 @@
 scalaVersion := "2.12.13"
 
-PB.targets in Compile := Seq(
-  PB.gens.java -> (sourceManaged in Compile).value,
-  protoc_lint.ProtocLint() -> (sourceManaged in Compile).value
+(Compile / PB.targets) := Seq(
+  PB.gens.java -> (Compile / sourceManaged).value,
+  protoc_lint.ProtocLint() -> (Compile / sourceManaged).value
 )
 
 TaskKey[Unit]("changeProto1") := {

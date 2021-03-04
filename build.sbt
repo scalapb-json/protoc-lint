@@ -10,7 +10,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 val unusedWarnings = Seq("-Ywarn-unused")
 
 val tagName = Def.setting {
-  s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value
+  s"v${if (releaseUseGlobalVersion.value) (ThisBuild / version).value
   else version.value}"
 }
 
@@ -75,16 +75,16 @@ val commonSettings = Def.settings(
     UpdateReadme.updateReadmeProcess,
     pushChanges
   ),
-  scalacOptions in (Compile, doc) ++= {
+  (Compile / doc / scalacOptions) ++= {
     val t = tagOrHash.value
     Seq(
       "-sourcepath",
-      (baseDirectory in LocalRootProject).value.getAbsolutePath,
+      (LocalRootProject / baseDirectory).value.getAbsolutePath,
       "-doc-source-url",
       s"https://github.com/scalapb-json/protoc-lint/tree/${t}€{FILE_PATH}.scala"
     )
   },
-  pomExtra in Global := {
+  (Global / pomExtra) := {
     <url>https://github.com/scalapb-json/protoc-lint</url>
     <scm>
       <connection>scm:git:github.com/scalapb-json/protoc-lint.git</connection>
@@ -120,13 +120,13 @@ val commonSettings = Def.settings(
     .flatten,
   libraryDependencies += "com.thesamet.scalapb" %% "protoc-bridge" % "0.9.2",
   scalacOptions ++= unusedWarnings,
-  Seq(Compile, Test).flatMap(c => scalacOptions in (c, console) --= unusedWarnings)
+  Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings)
 )
 
 commonSettings
 
 val noPublish = Seq(
-  skip in publish := true,
+  publish / skip := true,
   publishArtifact := false,
   publish := {},
   PgpKeys.publishSigned := {},
@@ -156,7 +156,7 @@ val protocLint = Project("protoc-lint", file("protoc-lint"))
     commonSettings,
     crossScalaVersions := Seq(Scala212, Scala213),
     scriptedSettings,
-    unmanagedResources in Compile += (baseDirectory in LocalRootProject).value / "LICENSE.txt",
+    (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
     name := UpdateReadme.projectName,
     argonautVersion := "6.3.3",
     libraryDependencies ++= Seq(
@@ -168,19 +168,19 @@ val protocLint = Project("protoc-lint", file("protoc-lint"))
 
 val shadeTarget = settingKey[String]("Target to use when shading")
 
-shadeTarget in ThisBuild := s"protoc_lint_shaded.v${version.value.replaceAll("[.-]", "_")}.@0"
+(ThisBuild / shadeTarget) := s"protoc_lint_shaded.v${version.value.replaceAll("[.-]", "_")}.@0"
 
 val shaded = Project("shaded", file("shaded"))
   .settings(
     commonSettings,
     scriptedSettings,
     name := UpdateReadme.shadedName,
-    assemblyShadeRules in assembly := Seq(
+    (assembly / assemblyShadeRules) := Seq(
       ShadeRule.rename("com.google.**" -> shadeTarget.value).inAll,
       ShadeRule.rename("play.api.libs.**" -> shadeTarget.value).inAll,
       ShadeRule.rename("argonaut.**" -> shadeTarget.value).inAll
     ),
-    assemblyExcludedJars in assembly := {
+    (assembly / assemblyExcludedJars) := {
       val toInclude = Seq(
         "gson",
         "guava",
@@ -189,10 +189,10 @@ val shaded = Project("shaded", file("shaded"))
         "protobuf-java-util"
       )
 
-      (fullClasspath in assembly).value.filterNot { c => toInclude.exists(prefix => c.data.getName.startsWith(prefix)) }
+      (assembly / fullClasspath).value.filterNot { c => toInclude.exists(prefix => c.data.getName.startsWith(prefix)) }
     },
-    artifact in (Compile, packageBin) := (artifact in (Compile, assembly)).value,
-    addArtifact(artifact in (Compile, packageBin), assembly),
+    (Compile / packageBin / artifact) := (Compile / assembly / artifact).value,
+    addArtifact(Compile / packageBin / artifact, assembly),
     pomPostProcess := { node =>
       import scala.xml.Comment
       import scala.xml.Elem
