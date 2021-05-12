@@ -29,8 +29,8 @@ addSbtPlugin("com.thesamet" % "sbt-protoc" % "1.0.0")
 ### `build.sbt`
 
 ```scala
-PB.targets in Compile := Seq(
-  protoc_lint.ProtocLint() -> (sourceManaged in Compile).value,
+Compile / PB.targets := Seq(
+  protoc_lint.ProtocLint() -> (Compile / sourceManaged).value,
   // and add another generator settings (e.g. java, scalapb)
   // see https://github.com/thesamet/sbt-protoc
 )
