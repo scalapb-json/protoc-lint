@@ -160,7 +160,7 @@ val protocLint = Project("protoc-lint", file("protoc-lint"))
     name := UpdateReadme.projectName,
     argonautVersion := "6.3.3",
     libraryDependencies ++= Seq(
-      "com.google.protobuf" % "protobuf-java-util" % "3.17.2",
+      "com.google.protobuf" % "protobuf-java-util" % "3.17.3",
       "io.argonaut" %% "argonaut" % argonautVersion.value
     )
   )
