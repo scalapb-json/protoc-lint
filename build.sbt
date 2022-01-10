@@ -3,7 +3,7 @@ import scala.collection.JavaConverters._
 import java.lang.management.ManagementFactory
 
 val Scala212 = "2.12.15"
-val Scala213 = "2.13.7"
+val Scala213 = "2.13.8"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
