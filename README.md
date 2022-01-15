@@ -1,7 +1,6 @@
 # protoc-lint
 
-[![scaladoc](https://javadoc-badge.appspot.com/io.github.scalapb-json/protoc-lint_2.12.svg?label=scaladoc)](https://javadoc-badge.appspot.com/io.github.scalapb-json/protoc-lint_2.12/protoc_lint/index.html?javadocio=true)
-
+[![scaladoc](https://javadoc.io/badge2/io.github.scalapb-json/protoc-lint_2.13/javadoc.svg)](https://javadoc.io/doc/io.github.scalapb-json/protoc-lint_2.13)
 protobuf linter for <https://github.com/thesamet/sbt-protoc>
 
 
