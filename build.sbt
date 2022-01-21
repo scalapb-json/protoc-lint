@@ -158,7 +158,7 @@ val protocLint = Project("protoc-lint", file("protoc-lint"))
     scriptedSettings,
     (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
     name := UpdateReadme.projectName,
-    argonautVersion := "6.3.7",
+    argonautVersion := "6.3.8",
     libraryDependencies ++= Seq(
       "com.google.protobuf" % "protobuf-java-util" % "3.19.3",
       "io.argonaut" %% "argonaut" % argonautVersion.value
