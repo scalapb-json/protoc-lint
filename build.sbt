@@ -11,7 +11,7 @@ val unusedWarnings = Seq("-Ywarn-unused")
 
 val tagName = Def.setting {
   s"v${if (releaseUseGlobalVersion.value) (ThisBuild / version).value
-  else version.value}"
+    else version.value}"
 }
 
 val tagOrHash = Def.setting {
