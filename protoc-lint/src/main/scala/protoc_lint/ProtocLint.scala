@@ -6,22 +6,25 @@ import com.google.protobuf.compiler.PluginProtos._
 import argonaut._
 import scala.collection.JavaConverters._
 
-case class ProtocLint(exclude: LintError => Boolean = _ => false) extends ProtocCodeGenerator {
+case class ProtocLint(
+  exclude: LintError => Boolean = _ => false,
+  logger: String => Unit = str => println(str)
+) extends ProtocCodeGenerator {
+
   override def run(req: Array[Byte]): Array[Byte] =
     run0(CodeGeneratorRequest.parseFrom(req)).toByteArray
 
   private[this] def run0(req: CodeGeneratorRequest): CodeGeneratorResponse = {
     val errors = lint(req)
     if (errors.isEmpty) {
-      println("success lint")
+      logger("success lint")
       CodeGeneratorResponse.newBuilder().build()
     } else {
       val (excluded, realErrors) = errors.partition(exclude)
 
-      println(
+      logger(
         s"found ${errors.size} lint errors. excluded ${excluded.size} errors. realErrors count = ${realErrors.size}"
       )
-      println(Json.jArray(excluded.map(_.toJson)).spaces2)
 
       if (realErrors.isEmpty) {
         CodeGeneratorResponse.newBuilder().build()
