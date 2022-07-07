@@ -13,7 +13,7 @@ protobuf linter for <https://github.com/thesamet/sbt-protoc>
 
 ```scala
 libraryDependencies += "io.github.scalapb-json" %% "protoc-lint" % "0.6.0"
-addSbtPlugin("com.thesamet" % "sbt-protoc" % "1.0.0")
+addSbtPlugin("com.thesamet" % "sbt-protoc" % "1.0.6")
 ```
 
 or
@@ -21,7 +21,7 @@ or
 ```scala
 // shaded version. you can avoid dependency conflict. only sbt Scala 2.12, sbt 1.x
 libraryDependencies += "io.github.scalapb-json" %% "protoc-lint-shaded" % "0.6.0"
-addSbtPlugin("com.thesamet" % "sbt-protoc" % "1.0.0")
+addSbtPlugin("com.thesamet" % "sbt-protoc" % "1.0.6")
 ```
 
 
@@ -32,5 +32,16 @@ Compile / PB.targets := Seq(
   protoc_lint.ProtocLint() -> (Compile / sourceManaged).value,
   // and add another generator settings (e.g. java, scalapb)
   // see https://github.com/thesamet/sbt-protoc
+)
+```
+
+#### exclude error example
+
+```scala
+Compile / PB.targets := Seq(
+  protoc_lint.ProtocLint({
+    case _: protoc_lint.LintError.MessageNameCamel => true
+    case _ => false
+  }) -> (Compile / sourceManaged).value
 )
 ```
