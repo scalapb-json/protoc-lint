@@ -2,7 +2,7 @@ import sbtrelease.ReleaseStateTransformations._
 import scala.collection.JavaConverters._
 import java.lang.management.ManagementFactory
 
-val Scala212 = "2.12.16"
+val Scala212 = "2.12.17"
 val Scala213 = "2.13.8"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
