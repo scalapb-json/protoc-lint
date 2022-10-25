@@ -118,7 +118,7 @@ val commonSettings = Def.settings(
     }
     .toList
     .flatten,
-  libraryDependencies += "com.thesamet.scalapb" %% "protoc-bridge" % "0.9.5",
+  libraryDependencies += "com.thesamet.scalapb" %% "protoc-bridge" % "0.9.6",
   scalacOptions ++= unusedWarnings,
   Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings)
 )
