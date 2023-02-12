@@ -28,7 +28,7 @@ addSbtPlugin("com.thesamet" % "sbt-protoc" % "1.0.6")
 ### `build.sbt`
 
 ```scala
-Compile / PB.targets := Seq(
+Compile / PB.targets ++= Seq[protocbridge.Target](
   protoc_lint.ProtocLint() -> (Compile / sourceManaged).value,
   // and add another generator settings (e.g. java, scalapb)
   // see https://github.com/thesamet/sbt-protoc
@@ -38,7 +38,7 @@ Compile / PB.targets := Seq(
 #### exclude error example
 
 ```scala
-Compile / PB.targets := Seq(
+Compile / PB.targets ++= Seq[protocbridge.Target](
   protoc_lint.ProtocLint({
     case _: protoc_lint.LintError.MessageNameCamel => true
     case _ => false
