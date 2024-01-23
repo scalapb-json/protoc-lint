@@ -27,6 +27,7 @@ TaskKey[Unit]("changeProto2") := {
 package com.example;
 
 message Foo {
+  optional string my_field = 1;
 }
 """
   )

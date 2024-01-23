@@ -16,9 +16,13 @@ case class ProtocLint(
 
   private[this] def run0(req: CodeGeneratorRequest): CodeGeneratorResponse = {
     val errors = lint(req)
+    val builder = CodeGeneratorResponse
+      .newBuilder()
+      .setSupportedFeatures(CodeGeneratorResponse.Feature.FEATURE_PROTO3_OPTIONAL_VALUE)
+
     if (errors.isEmpty) {
       logger("success lint")
-      CodeGeneratorResponse.newBuilder().build()
+      builder.build()
     } else {
       val (excluded, realErrors) = errors.partition(exclude)
 
@@ -27,10 +31,10 @@ case class ProtocLint(
       )
 
       if (realErrors.isEmpty) {
-        CodeGeneratorResponse.newBuilder().build()
+        builder.build()
       } else {
         val errorJson = Json.jArray(realErrors.map(_.toJson)).spaces2
-        CodeGeneratorResponse.newBuilder().setError(errorJson).build()
+        builder.setError(errorJson).build()
       }
     }
   }
