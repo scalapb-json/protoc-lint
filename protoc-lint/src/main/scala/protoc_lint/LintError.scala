@@ -17,7 +17,7 @@ object LintError {
   final case class MessageNameCamel(service: DescriptorProto) extends LintError
   final case class FieldNameUnderscoreSeparated(field: FieldDescriptorProto) extends LintError
 
-  implicit class GeneratedMessageOps[A <: MessageOrBuilder](val self: A) extends AnyVal {
+  implicit class GeneratedMessageOps[A <: MessageOrBuilder](private val self: A) extends AnyVal {
     def toJsonString: String =
       JsonFormat.printer.print(self)
     def toJson: Json =
