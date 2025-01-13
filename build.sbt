@@ -32,9 +32,8 @@ val scriptedSettings = Seq(
   },
   sbtTestDirectory := file("test"),
   scriptedBufferLog := false,
-  scriptedLaunchOpts ++= ManagementFactory.getRuntimeMXBean.getInputArguments.asScala.toList.filter(a =>
-    Seq("-Xmx", "-Xms", "-XX", "-Dsbt.log.noformat").exists(a.startsWith)
-  ),
+  scriptedLaunchOpts ++= ManagementFactory.getRuntimeMXBean.getInputArguments.asScala.toList
+    .filter(a => Seq("-Xmx", "-Xms", "-XX", "-Dsbt.log.noformat").exists(a.startsWith)),
   scriptedLaunchOpts ++= Seq(
     s"-Dprotoc-lint-version=${version.value}",
     s"-Dprotoc-lint-artifact-id=${name.value}"
