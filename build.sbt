@@ -4,6 +4,7 @@ import java.lang.management.ManagementFactory
 
 val Scala212 = "2.12.20"
 val Scala213 = "2.13.16"
+val Scala3 = "3.3.6"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
@@ -102,7 +103,7 @@ val commonSettings = Def.settings(
   publishLocal := {}, // use local maven in scripted-test
   publishTo := sonatypePublishToBundle.value,
   scalaVersion := Scala212,
-  crossScalaVersions := Seq(Scala212),
+  crossScalaVersions := Seq(Scala212, Scala213, Scala3),
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
@@ -153,7 +154,7 @@ val argonautVersion = settingKey[String]("")
 val protocLint = Project("protoc-lint", file("protoc-lint"))
   .settings(
     commonSettings,
-    crossScalaVersions := Seq(Scala212, Scala213),
+    crossScalaVersions := Seq(Scala212, Scala213, Scala3),
     scriptedSettings,
     (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
     name := UpdateReadme.projectName,
