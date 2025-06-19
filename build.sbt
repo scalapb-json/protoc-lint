@@ -69,7 +69,7 @@ val commonSettings = Def.settings(
     releaseStepCommandAndRemaining("set ThisBuild / useSuperShell := false"),
     releaseStepCommandAndRemaining("+ publishSigned"),
     releaseStepCommandAndRemaining("set ThisBuild / useSuperShell := true"),
-    releaseStepCommand("sonatypeBundleRelease"),
+    releaseStepCommand("sonaRelease"),
     setNextVersion,
     commitNextVersion,
     UpdateReadme.updateReadmeProcess,
@@ -101,7 +101,7 @@ val commonSettings = Def.settings(
     </developers>
   },
   publishLocal := {}, // use local maven in scripted-test
-  publishTo := sonatypePublishToBundle.value,
+  publishTo := (if (isSnapshot.value) None else localStaging.value),
   scalaVersion := Scala212,
   crossScalaVersions := Seq(Scala212, Scala213, Scala3),
   scalacOptions ++= Seq(
