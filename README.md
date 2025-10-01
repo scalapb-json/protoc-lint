@@ -4,7 +4,7 @@
 protobuf linter for <https://github.com/thesamet/sbt-protoc>
 
 
-<https://developers.google.com/protocol-buffers/docs/style>
+<https://protobuf.dev/programming-guides/style/>
 
 
 ## sbt settings
