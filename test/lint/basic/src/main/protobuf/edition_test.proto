@@ -1,0 +1,5 @@
+edition = "2024";
+
+package com.example;
+
+message EditionTest{}

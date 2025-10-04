@@ -1,7 +1,9 @@
 scalaVersion := "2.12.20"
 
+PB.protocVersion := "4.32.1"
+
 (Compile / PB.targets) ++= Seq[protocbridge.Target](
-  PB.gens.java -> (Compile / sourceManaged).value,
+  PB.gens.java(PB.protocVersion.value) -> (Compile / sourceManaged).value,
   protoc_lint.ProtocLint() -> (Compile / sourceManaged).value
 )
 
