@@ -4,6 +4,7 @@ import protocbridge.ProtocCodeGenerator
 import com.google.protobuf.DescriptorProtos.{EnumValueDescriptorProto, FieldDescriptorProto, FileDescriptorProto}
 import com.google.protobuf.compiler.PluginProtos._
 import argonaut._
+import com.google.protobuf.UnknownFieldSet
 import scala.collection.JavaConverters._
 
 case class ProtocLint(
@@ -18,7 +19,38 @@ case class ProtocLint(
     val errors = lint(req)
     val builder = CodeGeneratorResponse
       .newBuilder()
-      .setSupportedFeatures(CodeGeneratorResponse.Feature.FEATURE_PROTO3_OPTIONAL_VALUE)
+      .setSupportedFeatures(
+        Seq(
+          CodeGeneratorResponse.Feature.FEATURE_PROTO3_OPTIONAL_VALUE,
+          CodeGeneratorResponse.Feature.FEATURE_SUPPORTS_EDITIONS_VALUE
+        ).sum
+      )
+      .setUnknownFields(
+        // https://github.com/protocolbuffers/protobuf/blob/1f60d67437d7f57700/src/google/protobuf/compiler/plugin.proto#L105-L115
+        UnknownFieldSet
+          .newBuilder()
+          .addField(
+            3,
+            UnknownFieldSet.Field
+              .newBuilder()
+              .addVarint(
+                // https://github.com/protocolbuffers/protobuf/blob/9f3f4ddfdc03272/src/google/protobuf/descriptor.proto#L68-L87
+                998
+              )
+              .build()
+          )
+          .addField(
+            4,
+            UnknownFieldSet.Field
+              .newBuilder()
+              .addVarint(
+                // https://github.com/protocolbuffers/protobuf/blob/9f3f4ddfdc03272/src/google/protobuf/descriptor.proto#L68-L87
+                0x7fffffff
+              )
+              .build()
+          )
+          .build()
+      )
 
     if (errors.isEmpty) {
       logger("success lint")
