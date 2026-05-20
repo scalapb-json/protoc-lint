@@ -109,7 +109,6 @@ val commonSettings = Def.settings(
     "-unchecked",
     "-Xlint",
     "-language:existentials",
-    "-language:higherKinds",
     "-language:implicitConversions"
   ),
   scalacOptions ++= PartialFunction
