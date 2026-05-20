@@ -25,10 +25,18 @@ val scriptedSettings = Seq(
   libraryDependencies := {
     val libs = libraryDependencies.value
     CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 12)) =>
-        libs
-      case _ =>
+      case Some((2, 13)) =>
         libs.filterNot(_.organization == "org.scala-sbt")
+      case _ =>
+        libs
+    }
+  },
+  pluginCrossBuild / sbtVersion := {
+    scalaBinaryVersion.value match {
+      case "2.12" =>
+        sbtVersion.value
+      case _ =>
+        "2.0.0-RC13"
     }
   },
   sbtTestDirectory := file("test"),
@@ -139,9 +147,15 @@ commands += Command.command("testAll") {
     cleanLocalMaven,
     s"project ${shaded.id}",
     "+ publishM2",
+    "++ 2.12.x",
+    "scripted",
+    "++ 3.x",
     "scripted",
     s"project ${protocLint.id}",
     "+ publishM2",
+    "++ 2.12.x",
+    "scripted",
+    "++ 3.x",
     "scripted",
     "project /",
     cleanLocalMaven
