@@ -7,7 +7,7 @@ PB.protocVersion := "4.32.1"
   protoc_lint.ProtocLint() -> (Compile / sourceManaged).value
 )
 
-TaskKey[Unit]("changeProto1") := {
+InputKey[Unit]("changeProto1") := {
   IO.write(
     file = file("src/main/protobuf/bar.proto"),
     content = """syntax = "proto3";
@@ -20,7 +20,7 @@ message bad_name_proto_message {
   )
 }
 
-TaskKey[Unit]("changeProto2") := {
+InputKey[Unit]("changeProto2") := {
   IO.delete(file("src/main/protobuf"))
   IO.write(
     file = file("src/main/protobuf/foo.proto"),
