@@ -112,6 +112,19 @@ val commonSettings = Def.settings(
   publishTo := (if (isSnapshot.value) None else localStaging.value),
   scalaVersion := Scala212,
   crossScalaVersions := Seq(Scala212, Scala213, Scala3),
+  scalacOptions ++= {
+    scalaBinaryVersion.value match {
+      case "2.12" | "2.13" =>
+        Seq("-release:8")
+      case _ if scalaVersion.value.startsWith("3.3.") =>
+        Seq(
+          "-release:11",
+          "-Yfuture-lazy-vals"
+        )
+      case _ =>
+        Nil
+    }
+  },
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
