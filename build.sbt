@@ -1,12 +1,10 @@
 import sbtrelease.ReleaseStateTransformations._
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import java.lang.management.ManagementFactory
 
 val Scala212 = "2.12.21"
 val Scala213 = "2.13.18"
 val Scala3 = "3.3.8"
-
-Global / onChangedBuildSource := ReloadOnSourceChanges
 
 val unusedWarnings = Seq("-Ywarn-unused")
 
@@ -17,7 +15,7 @@ val tagName = Def.setting {
 
 val tagOrHash = Def.setting {
   if (isSnapshot.value)
-    sys.process.Process("git rev-parse HEAD").lineStream_!.head
+    sys.process.Process("git rev-parse HEAD").lazyLines_!.head
   else tagName.value
 }
 
@@ -34,9 +32,9 @@ val scriptedSettings = Seq(
   pluginCrossBuild / sbtVersion := {
     scalaBinaryVersion.value match {
       case "2.12" =>
-        sbtVersion.value
+        "1.12.13"
       case _ =>
-        "2.0.1"
+        sbtVersion.value
     }
   },
   sbtTestDirectory := file("test"),
@@ -186,7 +184,10 @@ val shaded = Project("shaded", file("shaded"))
         "protobuf-java-util"
       )
 
-      (assembly / fullClasspath).value.filterNot { c => toInclude.exists(prefix => c.data.getName.startsWith(prefix)) }
+      (assembly / fullClasspath).value.filterNot { c =>
+        val f = fileConverter.value.toPath(c.data).toFile.getName
+        toInclude.exists(f.startsWith)
+      }
     },
     (Compile / packageBin / artifact) := (Compile / assembly / artifact).value,
     addArtifact(Compile / packageBin / artifact, assembly),
@@ -214,7 +215,7 @@ val shaded = Project("shaded", file("shaded"))
 
 val protocLintRoot = project
   .in(file("."))
-  .aggregate(protocLint, shaded)
+  .autoAggregate
   .settings(
     commonSettings,
     noPublish,
