@@ -49,9 +49,10 @@ val scriptedSettings = Seq(
   )
 )
 
-val cleanLocalMaven = "cleanLocalMaven"
+@transient
+val cleanLocalMaven = taskKey[Unit]("")
 
-TaskKey[Unit](cleanLocalMaven) := {
+cleanLocalMaven := {
   val dir = Path.userHome / s".m2/repository/${organization.value.replace('.', '/')}"
   println("delete " + dir)
   IO.delete(dir)
@@ -157,7 +158,7 @@ noPublish
 
 commands += Command.command("testAll") {
   List(
-    cleanLocalMaven,
+    cleanLocalMaven.key.label,
     s"project ${shaded.id}",
     "+ publishM2",
     "++ 2.12.x",
@@ -171,7 +172,7 @@ commands += Command.command("testAll") {
     "++ 3.x",
     "scripted",
     "project /",
-    cleanLocalMaven
+    cleanLocalMaven.key.label
   ) ::: _
 }
 
