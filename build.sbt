@@ -119,13 +119,12 @@ val commonSettings = Def.settings(
   scalacOptions ++= Seq(
     "-deprecation",
     "-unchecked",
-    "-Xlint",
     "-language:existentials",
     "-language:implicitConversions"
   ),
   scalacOptions ++= PartialFunction
     .condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
-      case Some((2, v)) if v <= 12 => Seq("-Yno-adapted-args")
+      case Some((2, v)) if v <= 12 => Seq("-Yno-adapted-args", "-Xlint")
     }
     .toList
     .flatten,
