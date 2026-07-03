@@ -19,15 +19,6 @@ val tagOrHash = Def.setting {
 }
 
 val scriptedSettings = Seq(
-  libraryDependencies := {
-    val libs = libraryDependencies.value
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 13)) =>
-        libs.filterNot(_.organization == "org.scala-sbt")
-      case _ =>
-        libs
-    }
-  },
   pluginCrossBuild / sbtVersion := {
     scalaBinaryVersion.value match {
       case "2.12" =>
