@@ -6,7 +6,14 @@ val Scala212 = "2.12.21"
 val Scala213 = "2.13.18"
 val Scala3 = "3.3.8"
 
-val unusedWarnings = Seq("-Ywarn-unused")
+val unusedWarnings = Def.setting(
+  scalaBinaryVersion.value match {
+    case "3" =>
+      Seq("-Wunused:imports")
+    case _ =>
+      Seq("-Ywarn-unused")
+  }
+)
 
 val tagName = Def.setting {
   s"v${if (releaseUseGlobalVersion.value) (ThisBuild / version).value
@@ -133,8 +140,8 @@ val commonSettings = Def.settings(
     .toList
     .flatten,
   libraryDependencies += "com.thesamet.scalapb" %% "protoc-bridge" % "0.9.9",
-  scalacOptions ++= unusedWarnings,
-  Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings)
+  scalacOptions ++= unusedWarnings.value,
+  Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings.value)
 )
 
 val noPublish = Seq(
