@@ -139,8 +139,6 @@ val noPublish = Seq(
   PgpKeys.publishLocalSigned := {}
 )
 
-val argonautVersion = settingKey[String]("")
-
 val scalaVersions = Seq(Scala212, Scala3)
 
 val protocLint = projectMatrix
@@ -153,10 +151,9 @@ val protocLint = projectMatrix
     scriptedSettings,
     (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
     name := UpdateReadme.projectName,
-    argonautVersion := "6.3.13",
     libraryDependencies ++= Seq(
       "com.google.protobuf" % "protobuf-java-util" % "3.25.9",
-      "io.github.argonaut-io" %% "argonaut" % argonautVersion.value
+      "io.github.argonaut-io" %% "argonaut" % "6.3.13"
     )
   )
   .enablePlugins(ScriptedPlugin)
