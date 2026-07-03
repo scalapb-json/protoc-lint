@@ -52,18 +52,13 @@ val scriptedSettings = Seq(
 @transient
 val cleanLocalMaven = taskKey[Unit]("")
 
-cleanLocalMaven := {
-  val dir = Path.userHome / s".m2/repository/${organization.value.replace('.', '/')}"
-  println("delete " + dir)
-  IO.delete(dir)
-}
-
 val commonSettings = Def.settings(
   description := "protobuf linter",
   licenses += ("MIT", url("https://opensource.org/licenses/MIT")),
   organization := "io.github.scalapb-json",
   ReleasePlugin.extraReleaseCommands,
   commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
+  exportJars := false,
   releaseTagName := tagName.value,
   releaseCrossBuild := true,
   releaseProcess := Seq[ReleaseStep](
@@ -175,7 +170,6 @@ val shaded = Project("shaded", file("shaded"))
   .settings(
     commonSettings,
     scriptedSettings,
-    exportJars := false,
     name := UpdateReadme.shadedName,
     shadeTarget := s"protoc_lint_shaded.v${version.value.replaceAll("[.-]", "_")}.@0",
     (assembly / assemblyShadeRules) := Seq(
@@ -224,6 +218,11 @@ val protocLintRoot = project
   .settings(
     commonSettings,
     noPublish,
+    cleanLocalMaven := {
+      val dir = Path.userHome / s".m2/repository/${organization.value.replace('.', '/')}"
+      println("delete " + dir)
+      IO.delete(dir)
+    },
     commands += Command.command("testAll") {
       List(
         cleanLocalMaven.key.label,
