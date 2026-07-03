@@ -3,7 +3,6 @@ import scala.jdk.CollectionConverters._
 import java.lang.management.ManagementFactory
 
 val Scala212 = "2.12.21"
-val Scala213 = "2.13.18"
 val Scala3 = "3.3.8"
 
 val unusedWarnings = Seq("-Ywarn-unused")
@@ -104,8 +103,6 @@ val commonSettings = Def.settings(
   },
   publishLocal := {}, // use local maven in scripted-test
   publishTo := (if (isSnapshot.value) None else localStaging.value),
-  scalaVersion := Scala212,
-  crossScalaVersions := Seq(Scala212, Scala213, Scala3),
   scalacOptions ++= {
     scalaBinaryVersion.value match {
       case "2.12" | "2.13" =>
@@ -147,10 +144,15 @@ val noPublish = Seq(
 
 val argonautVersion = settingKey[String]("")
 
-val protocLint = Project("protoc-lint", file("protoc-lint"))
+val scalaVersions = Seq(Scala212, Scala3)
+
+val protocLint = projectMatrix
+  .in(file("protoc-lint"))
+  .defaultAxes(VirtualAxis.jvm)
+  .jvmPlatform(scalaVersions = scalaVersions)
   .settings(
     commonSettings,
-    crossScalaVersions := Seq(Scala212, Scala213, Scala3),
+    name := "protoc-lint",
     scriptedSettings,
     (Compile / unmanagedResources) += (LocalRootProject / baseDirectory).value / "LICENSE.txt",
     name := UpdateReadme.projectName,
@@ -164,7 +166,10 @@ val protocLint = Project("protoc-lint", file("protoc-lint"))
 
 val shadeTarget = settingKey[String]("Target to use when shading")
 
-val shaded = Project("shaded", file("shaded"))
+val shaded = projectMatrix
+  .in(file("shaded"))
+  .defaultAxes(VirtualAxis.jvm)
+  .jvmPlatform(scalaVersions = scalaVersions)
   .settings(
     commonSettings,
     scriptedSettings,
@@ -227,19 +232,8 @@ val protocLintRoot = project
     commands += Command.command("testAll") {
       List(
         cleanLocalMaven.key.label,
-        s"project ${shaded.id}",
-        "+ publishM2",
-        "++ 2.12.x",
-        "scripted",
-        "++ 3.x",
-        "scripted",
-        s"project ${protocLint.id}",
-        "+ publishM2",
-        "++ 2.12.x",
-        "scripted",
-        "++ 3.x",
-        "scripted",
-        "project /",
+        publishM2.key.label,
+        scripted.key.label,
         cleanLocalMaven.key.label
       ) ::: _
     }
