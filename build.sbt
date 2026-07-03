@@ -144,8 +144,6 @@ val commonSettings = Def.settings(
   Seq(Compile, Test).flatMap(c => c / console / scalacOptions --= unusedWarnings)
 )
 
-commonSettings
-
 val noPublish = Seq(
   publish / skip := true,
   publishArtifact := false,
@@ -153,28 +151,6 @@ val noPublish = Seq(
   PgpKeys.publishSigned := {},
   PgpKeys.publishLocalSigned := {}
 )
-
-noPublish
-
-commands += Command.command("testAll") {
-  List(
-    cleanLocalMaven.key.label,
-    s"project ${shaded.id}",
-    "+ publishM2",
-    "++ 2.12.x",
-    "scripted",
-    "++ 3.x",
-    "scripted",
-    s"project ${protocLint.id}",
-    "+ publishM2",
-    "++ 2.12.x",
-    "scripted",
-    "++ 3.x",
-    "scripted",
-    "project /",
-    cleanLocalMaven.key.label
-  ) ::: _
-}
 
 val argonautVersion = settingKey[String]("")
 
@@ -195,13 +171,13 @@ val protocLint = Project("protoc-lint", file("protoc-lint"))
 
 val shadeTarget = settingKey[String]("Target to use when shading")
 
-(ThisBuild / shadeTarget) := s"protoc_lint_shaded.v${version.value.replaceAll("[.-]", "_")}.@0"
-
 val shaded = Project("shaded", file("shaded"))
   .settings(
     commonSettings,
     scriptedSettings,
+    exportJars := false,
     name := UpdateReadme.shadedName,
+    shadeTarget := s"protoc_lint_shaded.v${version.value.replaceAll("[.-]", "_")}.@0",
     (assembly / assemblyShadeRules) := Seq(
       ShadeRule.rename("com.google.**" -> shadeTarget.value).inAll,
       ShadeRule.rename("play.api.libs.**" -> shadeTarget.value).inAll,
@@ -242,4 +218,29 @@ val shaded = Project("shaded", file("shaded"))
   .dependsOn(protocLint)
   .enablePlugins(ScriptedPlugin)
 
-val root = project.in(file(".")).aggregate(protocLint, shaded)
+val protocLintRoot = project
+  .in(file("."))
+  .aggregate(protocLint, shaded)
+  .settings(
+    commonSettings,
+    noPublish,
+    commands += Command.command("testAll") {
+      List(
+        cleanLocalMaven.key.label,
+        s"project ${shaded.id}",
+        "+ publishM2",
+        "++ 2.12.x",
+        "scripted",
+        "++ 3.x",
+        "scripted",
+        s"project ${protocLint.id}",
+        "+ publishM2",
+        "++ 2.12.x",
+        "scripted",
+        "++ 3.x",
+        "scripted",
+        "project /",
+        cleanLocalMaven.key.label
+      ) ::: _
+    }
+  )
