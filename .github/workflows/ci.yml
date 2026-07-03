@@ -26,8 +26,8 @@ jobs:
            --server
            scalafmtCheckAll
            scalafmtSbtCheck
-           "+ compile"
-           "+ test"
+           Test/compile
+           testFull
            testAll
     - shell: bash
       run: rm -rf "$HOME/.ivy2/local" || true
