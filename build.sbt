@@ -36,7 +36,7 @@ val scriptedSettings = Seq(
       case "2.12" =>
         sbtVersion.value
       case _ =>
-        "2.0.0-RC13"
+        "2.0.1"
     }
   },
   sbtTestDirectory := file("test"),
