@@ -8,7 +8,7 @@ libraryDependencies += {
   Defaults.sbtPluginExtra(
     "com.thesamet" % "sbt-protoc" % v,
     (pluginCrossBuild / sbtBinaryVersion).value,
-    (update / scalaBinaryVersion).value,
+    (update / scalaBinaryVersion).value
   )
 }
 
