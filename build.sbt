@@ -49,7 +49,7 @@ val cleanLocalMaven = taskKey[Unit]("")
 
 val commonSettings = Def.settings(
   description := "protobuf linter",
-  licenses += ("MIT", url("https://opensource.org/licenses/MIT")),
+  licenses += ("MIT", uri("https://opensource.org/licenses/MIT")),
   organization := "io.github.scalapb-json",
   ReleasePlugin.extraReleaseCommands,
   commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
