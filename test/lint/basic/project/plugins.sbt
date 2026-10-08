@@ -3,7 +3,7 @@ libraryDependencies += {
     case "1.0" =>
       "1.0.8"
     case "2" =>
-      "1.1.0-RC1"
+      "1.1.0-RC2"
   }
   Defaults.sbtPluginExtra(
     "com.thesamet" % "sbt-protoc" % v,
