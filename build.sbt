@@ -3,7 +3,7 @@ import scala.jdk.CollectionConverters._
 import java.lang.management.ManagementFactory
 
 val Scala212 = "2.12.21"
-val Scala3 = "3.3.9"
+val Scala3 = "3.9.0"
 
 val unusedWarnings = Def.setting(
   scalaBinaryVersion.value match {
